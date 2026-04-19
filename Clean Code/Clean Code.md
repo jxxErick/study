@@ -34,5 +34,9 @@ Não se repita, ou seja, se um código se repete várias vezes, ele vira um mét
 4. Caso precise fazer uma modificação grande, criar uma classe a parte, para não quebrar a existente
 5. Minimiza o risco de bugs regressivos
 6. Reforça outros principios do solid, como a letra s "Single responsability", pois acabou tendo classe com uma menor responsabilidade
-7. 
+
+### Liskov Substituition Principle
+1. Barbara liskov definiu esse principio
+2. Uma classe derivada pode e deve ser substituível por sua classe base
+3. Ou seja, caso ela deixe de ser derivada, ela continue funcionando
 
