@@ -318,9 +318,120 @@ Você usa uma fábrica: fabrica.criarProduto()
 
 ------------------------------------------------------------------------
 
-Resumo rápido
+##### Resumo rápido
 
 -   Design Patterns = soluções reutilizáveis
 -   Factory Method = padrão de criação
 -   Evita uso direto de “new”
 -   Deixa o código mais flexível
+
+## Abstract Factory
+
+##### O que é
+
+Abstract Factory é um padrão de criação que fornece uma interface para
+criar famílias de objetos relacionados sem especificar suas classes
+concretas.
+
+------------------------------------------------------------------------
+
+##### Objetivo
+
+Garantir que os objetos criados sejam compatíveis entre si.
+
+------------------------------------------------------------------------
+
+#####  Ideia principal
+
+Você não cria objetos diretamente com new.
+
+Em vez disso, usa uma fábrica abstrata que retorna diferentes tipos de
+objetos relacionados.
+
+------------------------------------------------------------------------
+
+##### Exemplo conceitual
+
+Imagine um sistema de UI:
+
+-   Tema Light
+    -   Botão Light
+    -   Input Light
+-   Tema Dark
+    -   Botão Dark
+    -   Input Dark
+
+A Abstract Factory garante que: - Se você escolher Dark, todos os
+componentes serão Dark - Evita misturar estilos sem querer
+
+------------------------------------------------------------------------
+
+##### Estrutura
+
+1. Abstract Factory
+
+Define os métodos de criação: - criarBotao() - criarInput()
+
+2. Concrete Factory
+
+Implementações concretas: - LightFactory - DarkFactory
+
+3. Abstract Products
+
+Interfaces: - Botao - Input
+
+4. Concrete Products
+
+Implementações: - BotaoLight, InputLight - BotaoDark, InputDark
+
+------------------------------------------------------------------------
+
+##### Exemplo simplificado (pseudo código)
+
+    interface UIFactory {
+        Botao criarBotao();
+        Input criarInput();
+    }
+
+    class DarkFactory implements UIFactory {
+        public Botao criarBotao() {
+            return new BotaoDark();
+        }
+
+        public Input criarInput() {
+            return new InputDark();
+        }
+    }
+
+------------------------------------------------------------------------
+
+##### Vantagens
+
+-   Garante compatibilidade entre objetos
+-   Desacoplamento do código
+-   Facilita troca de famílias de objetos
+-   Código mais organizado
+
+------------------------------------------------------------------------
+
+##### Desvantagens
+
+-   Aumenta a complexidade
+-   Muitas classes/interfaces
+-   Pode ser exagero para sistemas simples
+
+------------------------------------------------------------------------
+
+#####  Diferença para Factory Method
+
+-   Factory Method → cria um único tipo de objeto
+-   Abstract Factory → cria famílias de objetos relacionados
+
+------------------------------------------------------------------------
+
+##### Resumo rápido
+
+-   Padrão de criação
+-   Cria famílias de objetos
+-   Evita acoplamento direto
+-   Muito usado em sistemas grandes (UI, frameworks)
