@@ -267,3 +267,60 @@ class UserService {
 - LSP → filho não pode quebrar o pai  
 - ISP → interfaces pequenas e específicas  
 - DIP → depende de abstração, não de implementação  
+
+--- 
+## Design Patterns
+
+### O que é Design Patterns
+
+Design Patterns (Padrões de Projeto) são soluções reutilizáveis para
+problemas comuns no desenvolvimento de software.
+
+Eles não são códigos prontos, mas sim modelos que ajudam a organizar
+melhor a estrutura do sistema, tornando o código mais: - Reutilizável -
+Legível - Escalável - Fácil de manter
+
+São muito usados em linguagens orientadas a objetos como Java, C# e
+Python.
+
+------------------------------------------------------------------------
+
+### Factory Method
+
+#### O Factory Method é um padrão de criação.
+
+##### Objetivo
+
+Criar objetos sem expor a lógica de criação diretamente, delegando essa
+responsabilidade para subclasses.
+
+##### Problema que resolve
+
+Quando você precisa criar vários tipos de objetos semelhantes, mas não
+quer acoplar o código à classe concreta.
+
+##### Exemplo simples (ideia)
+
+Ao invés de fazer: new ProdutoA() new ProdutoB()
+
+Você usa uma fábrica: fabrica.criarProduto()
+
+##### Vantagens
+
+-   Desacoplamento do código
+-   Facilita manutenção
+-   Facilita extensão (novo tipo de produto)
+
+##### Desvantagens
+
+-   Pode aumentar a complexidade do código
+-   Mais classes e abstrações
+
+------------------------------------------------------------------------
+
+Resumo rápido
+
+-   Design Patterns = soluções reutilizáveis
+-   Factory Method = padrão de criação
+-   Evita uso direto de “new”
+-   Deixa o código mais flexível
