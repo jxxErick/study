@@ -435,3 +435,131 @@ Implementações: - BotaoLight, InputLight - BotaoDark, InputDark
 -   Cria famílias de objetos
 -   Evita acoplamento direto
 -   Muito usado em sistemas grandes (UI, frameworks)
+
+## Builder Pattern
+
+#### O que é
+
+Builder é um padrão de criação que permite construir objetos complexos
+passo a passo.
+
+Ele separa a construção do objeto da sua representação final, permitindo
+criar diferentes versões do mesmo objeto.
+
+------------------------------------------------------------------------
+
+#### Objetivo
+
+Facilitar a criação de objetos complexos com muitos parâmetros, evitando
+construtores enormes.
+
+------------------------------------------------------------------------
+
+####  Ideia principal
+
+Em vez de usar um construtor com vários parâmetros:
+
+    new Usuario(nome, email, senha, endereco, telefone)
+
+Você usa um Builder:
+
+    Usuario usuario = Usuario.builder()
+        .nome("Erick")
+        .email("email@email.com")
+        .senha("123")
+        .build();
+
+------------------------------------------------------------------------
+
+#### Problema que resolve
+
+-   Muitos parâmetros no construtor
+-   Código difícil de ler
+-   Ordem dos parâmetros pode causar erro
+
+------------------------------------------------------------------------
+
+#### Estrutura
+
+1. Product
+
+Objeto final que será construído (ex: Usuario)
+
+2. Builder
+
+Classe responsável por construir o objeto passo a passo
+
+3. Concrete Builder
+
+Implementação do Builder (às vezes é a própria classe com método
+builder())
+
+4. Director (opcional)
+
+Controla a ordem de construção
+
+------------------------------------------------------------------------
+
+#### Exemplo simplificado (Java)
+
+    public class Usuario {
+        private String nome;
+        private String email;
+
+        private Usuario(Builder builder) {
+            this.nome = builder.nome;
+            this.email = builder.email;
+        }
+
+        public static class Builder {
+            private String nome;
+            private String email;
+
+            public Builder nome(String nome) {
+                this.nome = nome;
+                return this;
+            }
+
+            public Builder email(String email) {
+                this.email = email;
+                return this;
+            }
+
+            public Usuario build() {
+                return new Usuario(this);
+            }
+        }
+    }
+
+------------------------------------------------------------------------
+
+#### Vantagens
+
+-   Código mais legível
+-   Evita construtores gigantes
+-   Permite objetos imutáveis
+-   Flexível para adicionar novos campos
+
+------------------------------------------------------------------------
+
+#### Desvantagens
+
+-   Mais código para escrever
+-   Pode ser desnecessário para objetos simples
+
+------------------------------------------------------------------------
+
+#### Quando usar
+
+-   Objetos com muitos atributos
+-   Quando alguns atributos são opcionais
+-   Quando quer melhorar legibilidade
+
+------------------------------------------------------------------------
+
+####  Resumo rápido
+
+-   Padrão de criação
+-   Construção passo a passo
+-   Evita construtores grandes
+-   Muito usado em Java (ex: Lombok @Builder)
