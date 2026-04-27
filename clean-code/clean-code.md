@@ -804,3 +804,111 @@ class Circulo extends Forma {
 - Separa abstração e implementação
 - Usa composição ao invés de herança
 - Facilita expansão do sistema
+
+
+## Chain of Responsibility
+
+### O que é
+Chain of Responsibility é um padrão comportamental que permite passar uma requisição por uma cadeia de objetos até que algum deles a trate.
+
+---
+
+### Objetivo
+Desacoplar o remetente da requisição do seu manipulador, permitindo que múltiplos objetos tenham a chance de processá-la.
+
+---
+
+### Ideia principal
+Você cria uma sequência (cadeia) de handlers, onde cada um decide:
+
+- Processa a requisição
+- Ou passa para o próximo
+
+---
+
+### Exemplo conceitual
+
+Imagine um sistema de aprovação:
+
+- Gerente → aprova até 1.000
+- Diretor → aprova até 10.000
+- CEO → aprova qualquer valor
+
+A requisição vai passando até alguém aprovar.
+
+---
+
+### Estrutura
+
+#### 1. Handler
+Define a interface para tratar a requisição e referência ao próximo handler
+
+#### 2. Concrete Handler
+Implementa o tratamento ou passa para o próximo
+
+#### 3. Client
+Inicia a requisição
+
+---
+
+### Exemplo simples (Java)
+
+```java
+abstract class Handler {
+    protected Handler proximo;
+
+    public void setProximo(Handler proximo) {
+        this.proximo = proximo;
+    }
+
+    public abstract void handle(int valor);
+}
+
+class Gerente extends Handler {
+    public void handle(int valor) {
+        if (valor <= 1000) {
+            System.out.println("Gerente aprovou");
+        } else if (proximo != null) {
+            proximo.handle(valor);
+        }
+    }
+}
+
+class Diretor extends Handler {
+    public void handle(int valor) {
+        if (valor <= 10000) {
+            System.out.println("Diretor aprovou");
+        } else if (proximo != null) {
+            proximo.handle(valor);
+        }
+    }
+}
+```
+
+---
+
+### Vantagens
+- Baixo acoplamento
+- Flexível (fácil adicionar novos handlers)
+- Organização do fluxo
+
+---
+
+### Desvantagens
+- Pode ser difícil de debugar
+- Não garante que alguém vai tratar a requisição
+
+---
+
+### Quando usar
+- Fluxos de aprovação
+- Validações encadeadas
+- Middlewares (ex: filtros HTTP)
+
+---
+
+### Resumo rápido
+- Padrão comportamental
+- Cadeia de processamento
+- Cada objeto decide tratar ou passar
+- Muito usado em pipelines e validações
