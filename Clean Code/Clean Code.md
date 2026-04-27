@@ -435,3 +435,246 @@ Implementações: - BotaoLight, InputLight - BotaoDark, InputDark
 -   Cria famílias de objetos
 -   Evita acoplamento direto
 -   Muito usado em sistemas grandes (UI, frameworks)
+
+## Builder Pattern
+
+#### O que é
+
+Builder é um padrão de criação que permite construir objetos complexos
+passo a passo.
+
+Ele separa a construção do objeto da sua representação final, permitindo
+criar diferentes versões do mesmo objeto.
+
+------------------------------------------------------------------------
+
+#### Objetivo
+
+Facilitar a criação de objetos complexos com muitos parâmetros, evitando
+construtores enormes.
+
+------------------------------------------------------------------------
+
+####  Ideia principal
+
+Em vez de usar um construtor com vários parâmetros:
+
+    new Usuario(nome, email, senha, endereco, telefone)
+
+Você usa um Builder:
+
+    Usuario usuario = Usuario.builder()
+        .nome("Erick")
+        .email("email@email.com")
+        .senha("123")
+        .build();
+
+------------------------------------------------------------------------
+
+#### Problema que resolve
+
+-   Muitos parâmetros no construtor
+-   Código difícil de ler
+-   Ordem dos parâmetros pode causar erro
+
+------------------------------------------------------------------------
+
+#### Estrutura
+
+1. Product
+
+Objeto final que será construído (ex: Usuario)
+
+2. Builder
+
+Classe responsável por construir o objeto passo a passo
+
+3. Concrete Builder
+
+Implementação do Builder (às vezes é a própria classe com método
+builder())
+
+4. Director (opcional)
+
+Controla a ordem de construção
+
+------------------------------------------------------------------------
+
+#### Exemplo simplificado (Java)
+
+    public class Usuario {
+        private String nome;
+        private String email;
+
+        private Usuario(Builder builder) {
+            this.nome = builder.nome;
+            this.email = builder.email;
+        }
+
+        public static class Builder {
+            private String nome;
+            private String email;
+
+            public Builder nome(String nome) {
+                this.nome = nome;
+                return this;
+            }
+
+            public Builder email(String email) {
+                this.email = email;
+                return this;
+            }
+
+            public Usuario build() {
+                return new Usuario(this);
+            }
+        }
+    }
+
+------------------------------------------------------------------------
+
+#### Vantagens
+
+-   Código mais legível
+-   Evita construtores gigantes
+-   Permite objetos imutáveis
+-   Flexível para adicionar novos campos
+
+------------------------------------------------------------------------
+
+#### Desvantagens
+
+-   Mais código para escrever
+-   Pode ser desnecessário para objetos simples
+
+------------------------------------------------------------------------
+
+#### Quando usar
+
+-   Objetos com muitos atributos
+-   Quando alguns atributos são opcionais
+-   Quando quer melhorar legibilidade
+
+------------------------------------------------------------------------
+
+####  Resumo rápido
+
+-   Padrão de criação
+-   Construção passo a passo
+-   Evita construtores grandes
+-   Muito usado em Java (ex: Lombok @Builder)
+
+
+## Adapter Pattern
+
+###  O que é
+Adapter é um padrão estrutural que permite que interfaces incompatíveis trabalhem juntas.
+
+Ele atua como um "tradutor" entre duas classes.
+
+---
+
+###  Objetivo
+Permitir que uma classe existente seja usada com outra interface sem modificar seu código.
+
+---
+
+###  Ideia principal
+Você tem:
+- Uma classe com interface incompatível
+- Um sistema que espera outra interface
+
+O Adapter faz a ponte entre os dois.
+
+---
+
+###  Exemplo conceitual
+
+Imagine:
+- Sistema espera: `Pagamento.processar()`
+- API externa tem: `Payment.execute()`
+
+O Adapter converte:
+
+```java
+class PaymentAdapter implements Pagamento {
+    private Payment payment;
+
+    public PaymentAdapter(Payment payment) {
+        this.payment = payment;
+    }
+
+    public void processar() {
+        payment.execute();
+    }
+}
+```
+
+---
+
+### Estrutura
+
+#### 1. Target
+Interface esperada pelo sistema
+
+#### 2. Adaptee
+Classe existente (incompatível)
+
+#### 3. Adapter
+Classe que faz a conversão
+
+---
+
+###  Exemplo simples (Java)
+
+```java
+interface TomadaPadrao {
+    void conectar();
+}
+
+class TomadaAmericana {
+    public void ligar() {
+        System.out.println("Ligado na tomada americana");
+    }
+}
+
+class AdapterTomada implements TomadaPadrao {
+    private TomadaAmericana tomada;
+
+    public AdapterTomada(TomadaAmericana tomada) {
+        this.tomada = tomada;
+    }
+
+    public void conectar() {
+        tomada.ligar();
+    }
+}
+```
+
+---
+
+###  Vantagens
+- Reutiliza código existente
+- Evita modificar código legado
+- Facilita integração com APIs externas
+
+---
+
+###  Desvantagens
+- Pode aumentar complexidade
+- Muitas classes intermediárias
+
+---
+
+###  Quando usar
+- Integração com sistemas externos
+- Código legado
+- Interfaces incompatíveis
+
+---
+
+###  Resumo rápido
+- Padrão estrutural
+- Funciona como "tradutor"
+- Conecta interfaces incompatíveis
+- Muito usado em integrações
