@@ -563,3 +563,118 @@ Controla a ordem de construção
 -   Construção passo a passo
 -   Evita construtores grandes
 -   Muito usado em Java (ex: Lombok @Builder)
+
+
+## Adapter Pattern
+
+###  O que é
+Adapter é um padrão estrutural que permite que interfaces incompatíveis trabalhem juntas.
+
+Ele atua como um "tradutor" entre duas classes.
+
+---
+
+###  Objetivo
+Permitir que uma classe existente seja usada com outra interface sem modificar seu código.
+
+---
+
+###  Ideia principal
+Você tem:
+- Uma classe com interface incompatível
+- Um sistema que espera outra interface
+
+O Adapter faz a ponte entre os dois.
+
+---
+
+###  Exemplo conceitual
+
+Imagine:
+- Sistema espera: `Pagamento.processar()`
+- API externa tem: `Payment.execute()`
+
+O Adapter converte:
+
+```java
+class PaymentAdapter implements Pagamento {
+    private Payment payment;
+
+    public PaymentAdapter(Payment payment) {
+        this.payment = payment;
+    }
+
+    public void processar() {
+        payment.execute();
+    }
+}
+```
+
+---
+
+### Estrutura
+
+#### 1. Target
+Interface esperada pelo sistema
+
+#### 2. Adaptee
+Classe existente (incompatível)
+
+#### 3. Adapter
+Classe que faz a conversão
+
+---
+
+###  Exemplo simples (Java)
+
+```java
+interface TomadaPadrao {
+    void conectar();
+}
+
+class TomadaAmericana {
+    public void ligar() {
+        System.out.println("Ligado na tomada americana");
+    }
+}
+
+class AdapterTomada implements TomadaPadrao {
+    private TomadaAmericana tomada;
+
+    public AdapterTomada(TomadaAmericana tomada) {
+        this.tomada = tomada;
+    }
+
+    public void conectar() {
+        tomada.ligar();
+    }
+}
+```
+
+---
+
+###  Vantagens
+- Reutiliza código existente
+- Evita modificar código legado
+- Facilita integração com APIs externas
+
+---
+
+###  Desvantagens
+- Pode aumentar complexidade
+- Muitas classes intermediárias
+
+---
+
+###  Quando usar
+- Integração com sistemas externos
+- Código legado
+- Interfaces incompatíveis
+
+---
+
+###  Resumo rápido
+- Padrão estrutural
+- Funciona como "tradutor"
+- Conecta interfaces incompatíveis
+- Muito usado em integrações
