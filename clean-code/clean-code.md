@@ -678,3 +678,129 @@ class AdapterTomada implements TomadaPadrao {
 - Funciona como "tradutor"
 - Conecta interfaces incompatíveis
 - Muito usado em integrações
+--- 
+## Bridge Pattern
+
+### O que é
+Bridge é um padrão estrutural que separa uma abstração da sua implementação, permitindo que ambas evoluam de forma independente.
+
+---
+
+### Objetivo
+Evitar explosão de classes quando temos múltiplas variações de abstração e implementação.
+
+---
+
+### Ideia principal
+Ao invés de criar várias combinações de classes (ex: FormaVermelha, FormaAzul, etc), você separa:
+
+- Abstração → o que o objeto faz
+- Implementação → como ele faz
+
+E conecta os dois via composição.
+
+---
+
+### Exemplo conceitual
+
+Imagine:
+
+- Abstração: Forma (Círculo, Quadrado)
+- Implementação: Cor (Vermelho, Azul)
+
+Sem Bridge:
+- CirculoVermelho
+- CirculoAzul
+- QuadradoVermelho
+- QuadradoAzul
+
+Com Bridge:
+- Forma usa Cor
+
+---
+
+### Estrutura
+
+#### 1. Abstraction
+Define a interface de alto nível (ex: Forma)
+
+#### 2. Refined Abstraction
+Extensão da abstração (ex: Circulo, Quadrado)
+
+#### 3. Implementor
+Interface de implementação (ex: Cor)
+
+#### 4. Concrete Implementor
+Implementações concretas (ex: Vermelho, Azul)
+
+---
+
+### Exemplo simples (Java)
+
+```java
+interface Cor {
+    void aplicarCor();
+}
+
+class Vermelho implements Cor {
+    public void aplicarCor() {
+        System.out.println("Cor vermelha");
+    }
+}
+
+class Azul implements Cor {
+    public void aplicarCor() {
+        System.out.println("Cor azul");
+    }
+}
+
+abstract class Forma {
+    protected Cor cor;
+
+    protected Forma(Cor cor) {
+        this.cor = cor;
+    }
+
+    abstract void desenhar();
+}
+
+class Circulo extends Forma {
+    public Circulo(Cor cor) {
+        super(cor);
+    }
+
+    public void desenhar() {
+        System.out.print("Circulo com ");
+        cor.aplicarCor();
+    }
+}
+```
+
+---
+
+### Vantagens
+- Evita explosão de classes
+- Alta flexibilidade
+- Separação de responsabilidades
+- Facilita manutenção
+
+---
+
+### Desvantagens
+- Pode aumentar complexidade inicial
+- Mais abstrações no código
+
+---
+
+### Quando usar
+- Quando há múltiplas dimensões de variação
+- Quando quer desacoplar abstração da implementação
+- Quando quer evitar muitas subclasses
+
+---
+
+### Resumo rápido
+- Padrão estrutural
+- Separa abstração e implementação
+- Usa composição ao invés de herança
+- Facilita expansão do sistema
