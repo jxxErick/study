@@ -1,4 +1,4 @@
-package br.com.jaxx.producer.service;
+package br.com.jaxx.producer.service.interfaces;
 
 public interface IStringService {
 
