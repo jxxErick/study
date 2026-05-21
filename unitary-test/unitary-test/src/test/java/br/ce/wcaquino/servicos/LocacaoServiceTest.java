@@ -23,6 +23,11 @@ import static br.ce.wcaquino.servicos.LocacaoService.ERR_MSG_MOVIE_WITHOUT_STOCK
 
 public class LocacaoServiceTest {
 
+
+    @Rule
+    public ExpectedException exception = ExpectedException.none();
+
+
     LocacaoService service = new LocacaoService();
     Usuario usuario = new Usuario();
     Filme movieWithStock1 = new Filme();
@@ -52,8 +57,6 @@ public class LocacaoServiceTest {
         movieWithStock.add(movieWithStock2);
     }
 
-    @Rule
-    public ExpectedException exception = ExpectedException.none();
 
 	@Test
 	public void testMovieWithStock() {
