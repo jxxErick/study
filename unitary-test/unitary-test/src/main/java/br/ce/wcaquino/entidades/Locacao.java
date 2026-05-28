@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -15,7 +16,7 @@ import java.util.List;
 public class Locacao {
 
 	private Usuario usuario;
-    List<Filme> filmes;
+    List<Filme> filmes = new ArrayList<Filme>();
 	private Date dataLocacao;
 	private Date dataRetorno;
 	private Double valor;
