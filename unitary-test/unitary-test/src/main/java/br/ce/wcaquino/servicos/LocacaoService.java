@@ -4,7 +4,9 @@ import br.ce.wcaquino.entidades.Filme;
 import br.ce.wcaquino.entidades.Locacao;
 import br.ce.wcaquino.entidades.Usuario;
 import br.ce.wcaquino.exception.MovieWithoutStockException;
+import br.ce.wcaquino.utils.DataUtils;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -53,7 +55,11 @@ public class LocacaoService {
         }
 
         locacao.setValor(valorTotal);
-        locacao.setDataRetorno(adicionarDias(new Date(), 1));
+        Date dateReturn = DataUtils
+                .verificarDiaSemana(new Date(), Calendar.SATURDAY)
+                ? adicionarDias(new Date(), 2)
+                : adicionarDias(new Date(), 1);
+        locacao.setDataRetorno(dateReturn);
 
         return locacao;
     }
