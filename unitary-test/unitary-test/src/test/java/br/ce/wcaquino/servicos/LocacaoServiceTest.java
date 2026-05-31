@@ -4,7 +4,9 @@ import br.ce.wcaquino.entidades.Filme;
 import br.ce.wcaquino.entidades.Locacao;
 import br.ce.wcaquino.entidades.Usuario;
 import br.ce.wcaquino.exception.MovieWithoutStockException;
-import br.ce.wcaquino.utils.DataUtils;
+import br.ce.wcaquino.utils.DateUtils;
+import matchers.PropertyMatcher;
+import matchers.SameDateMatcher;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
@@ -17,6 +19,8 @@ import java.util.List;
 
 import static br.ce.wcaquino.servicos.LocacaoService.ERR_MSG_MOVIE_EMPTY_LIST;
 import static br.ce.wcaquino.servicos.LocacaoService.ERR_MSG_MOVIE_WITHOUT_STOCK;
+import static matchers.PropertyMatcher.isSameDate;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class LocacaoServiceTest {
 
@@ -65,15 +69,16 @@ public class LocacaoServiceTest {
     @Test
     public void shouldSetRentalDateToToday() {
         Locacao locacao = service.alugarFilme(usuario, List.of(movie1));
-        Assert.assertTrue(DataUtils.isMesmaData(locacao.getDataLocacao(), new Date()));
+
+        assertThat(locacao.getDataLocacao(), isSameDate(new Date()));
     }
 
     @Test
     public void shouldSetReturnDateToNextDay() {
         Locacao locacao = service.alugarFilme(usuario, List.of(movie1));
-        Assert.assertTrue(DataUtils.isMesmaData(
+        Assert.assertTrue(DateUtils.isSameDate(
                 locacao.getDataRetorno(),
-                DataUtils.obterDataComDiferencaDias(1)
+                DateUtils.getDateWithDayDifference(1)
         ));
     }
 
