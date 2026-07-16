@@ -5,6 +5,8 @@ import br.ce.wcaquino.entidades.Locacao;
 import br.ce.wcaquino.entidades.Usuario;
 import br.ce.wcaquino.exception.MovieWithoutStockException;
 import br.ce.wcaquino.utils.DateUtils;
+import builders.MovieBuilder;
+import builders.UserBuilder;
 import matchers.PropertyMatcher;
 import matchers.SameDateMatcher;
 import org.junit.Assert;
@@ -19,6 +21,8 @@ import java.util.List;
 
 import static br.ce.wcaquino.servicos.LocacaoService.ERR_MSG_MOVIE_EMPTY_LIST;
 import static br.ce.wcaquino.servicos.LocacaoService.ERR_MSG_MOVIE_WITHOUT_STOCK;
+import static builders.MovieBuilder.aMovie;
+import static builders.UserBuilder.aUser;
 import static matchers.PropertyMatcher.isSameDate;
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -28,7 +32,7 @@ public class LocacaoServiceTest {
     public ExpectedException exception = ExpectedException.none();
 
     private LocacaoService service;
-    private Usuario usuario;
+    private Usuario usuario = aUser().now();
 
     // Base movies with fixed price of 4.0 to make discount math easy to verify
     private Filme movie1;
@@ -43,17 +47,14 @@ public class LocacaoServiceTest {
     public void setUp() {
         service = new LocacaoService();
 
-        usuario = new Usuario();
-        usuario.setNome("User 1");
+        movie1 = aMovie().now();
+        movie2 = aMovie().now();
+        movie3 = aMovie().now();
+        movie4 = aMovie().now();
+        movie5 = aMovie().now();
+        movie6 = aMovie().now();
 
-        movie1 = buildMovie("Movie 1", 4.0, 2);
-        movie2 = buildMovie("Movie 2", 4.0, 2);
-        movie3 = buildMovie("Movie 3", 4.0, 2);
-        movie4 = buildMovie("Movie 4", 4.0, 2);
-        movie5 = buildMovie("Movie 5", 4.0, 2);
-        movie6 = buildMovie("Movie 6", 4.0, 2);
-
-        movieWithoutStock = buildMovie("Movie Out of Stock", 4.0, 0);
+        movieWithoutStock = aMovie().withoutStock();
     }
 
     // ─── Helper ──────────────────────────────────────────────────────────────
@@ -87,37 +88,67 @@ public class LocacaoServiceTest {
     @Test
     public void shouldApplyNoDiscountForFirstMovie() {
         Locacao locacao = service.alugarFilme(usuario, List.of(movie1));
-        Assert.assertEquals(4.0, locacao.getValor(), 0.01);
+
+        Assert.assertEquals(
+                calculateExpected(movie1),
+                locacao.getValor(),
+                0.01
+        );
     }
 
     @Test
     public void shouldApplyNoDiscountForSecondMovie() {
         Locacao locacao = service.alugarFilme(usuario, List.of(movie1, movie2));
-        Assert.assertEquals(8.0, locacao.getValor(), 0.01);
+
+        Assert.assertEquals(
+                calculateExpected(movie1, movie2),
+                locacao.getValor(),
+                0.01
+        );
     }
 
     @Test
     public void shouldApply25PercentDiscountForThirdMovie() {
         Locacao locacao = service.alugarFilme(usuario, List.of(movie1, movie2, movie3));
-        Assert.assertEquals(11.0, locacao.getValor(), 0.01);
+
+        Assert.assertEquals(
+                calculateExpected(movie1, movie2, movie3),
+                locacao.getValor(),
+                0.01
+        );
     }
 
     @Test
     public void shouldApply50PercentDiscountForFourthMovie() {
         Locacao locacao = service.alugarFilme(usuario, List.of(movie1, movie2, movie3, movie4));
-        Assert.assertEquals(14.0, locacao.getValor(), 0.01);
+
+        Assert.assertEquals(
+                calculateExpected(movie1, movie2, movie3, movie4),
+                locacao.getValor(),
+                0.01
+        );
     }
 
     @Test
     public void shouldApply75PercentDiscountForFifthMovie() {
         Locacao locacao = service.alugarFilme(usuario, List.of(movie1, movie2, movie3, movie4, movie5));
-        Assert.assertEquals(17.0, locacao.getValor(), 0.01);
+
+        Assert.assertEquals(
+                calculateExpected(movie1, movie2, movie3, movie4, movie5),
+                locacao.getValor(),
+                0.01
+        );
     }
 
     @Test
     public void shouldApply100PercentDiscountForSixthMovie() {
         Locacao locacao = service.alugarFilme(usuario, List.of(movie1, movie2, movie3, movie4, movie5, movie6));
-        Assert.assertEquals(20.0, locacao.getValor(), 0.01);
+
+        Assert.assertEquals(
+                calculateExpected(movie1, movie2, movie3, movie4, movie5, movie6),
+                locacao.getValor(),
+                0.01
+        );
     }
 
     // ─── Validation / exception tests ────────────────────────────────────────
@@ -144,5 +175,24 @@ public class LocacaoServiceTest {
         exception.expectMessage(ERR_MSG_MOVIE_WITHOUT_STOCK);
 
         service.alugarFilme(usuario, List.of(movieWithoutStock));
+    }
+
+
+    private double calculateExpected(Filme... filmes) {
+        double total = 0.0;
+
+        for (int i = 0; i < filmes.length; i++) {
+            double multiplier = switch (i) {
+                case 2 -> filmes.length - 1 == i ? 0.75 : 1.0;
+                case 3 -> filmes.length - 1 == i ? 0.50 : 1.0;
+                case 4 -> filmes.length - 1 == i ? 0.25 : 1.0;
+                case 5 -> filmes.length - 1 == i ? 0.00 : 1.0;
+                default -> 1.0;
+            };
+
+            total += filmes[i].getPrecoLocacao() * multiplier;
+        }
+
+        return total;
     }
 }

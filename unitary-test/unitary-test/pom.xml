@@ -30,6 +30,14 @@
             <scope>provided</scope>
         </dependency>
 
+
+        <dependency>
+            <groupId>net.datafaker</groupId>
+            <artifactId>datafaker</artifactId>
+            <version>2.4.2</version>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
 </project>
