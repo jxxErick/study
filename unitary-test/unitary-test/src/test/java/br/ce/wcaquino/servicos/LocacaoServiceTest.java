@@ -5,6 +5,7 @@ import br.ce.wcaquino.entidades.Locacao;
 import br.ce.wcaquino.entidades.Usuario;
 import br.ce.wcaquino.exception.MovieWithoutStockException;
 import br.ce.wcaquino.utils.DateUtils;
+import builders.UserBuilder;
 import matchers.PropertyMatcher;
 import matchers.SameDateMatcher;
 import org.junit.Assert;
@@ -19,6 +20,7 @@ import java.util.List;
 
 import static br.ce.wcaquino.servicos.LocacaoService.ERR_MSG_MOVIE_EMPTY_LIST;
 import static br.ce.wcaquino.servicos.LocacaoService.ERR_MSG_MOVIE_WITHOUT_STOCK;
+import static builders.UserBuilder.aUser;
 import static matchers.PropertyMatcher.isSameDate;
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -28,7 +30,7 @@ public class LocacaoServiceTest {
     public ExpectedException exception = ExpectedException.none();
 
     private LocacaoService service;
-    private Usuario usuario;
+    private Usuario usuario = aUser().now();
 
     // Base movies with fixed price of 4.0 to make discount math easy to verify
     private Filme movie1;
@@ -42,9 +44,6 @@ public class LocacaoServiceTest {
     @Before
     public void setUp() {
         service = new LocacaoService();
-
-        usuario = new Usuario();
-        usuario.setNome("User 1");
 
         movie1 = buildMovie("Movie 1", 4.0, 2);
         movie2 = buildMovie("Movie 2", 4.0, 2);
